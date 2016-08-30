@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}POSAMEZNO SPOROČILO{% endblock title %}
+
+{% block body %}
+    <h1>PODATKI SPOROČILA</h1>
+    <p>ID sporočilo: {{sporocilo.key.id() }}</p>
+    <p>Vnos sporočila: {{ sporocilo.vnos }}</p>
+    <p>Datum sporočila: {{ sporocilo.nastanek }}</p>
+{% endblock body %}
