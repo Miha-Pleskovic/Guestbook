@@ -39,17 +39,27 @@ class MainHandler(BaseHandler):
 
 class ResultHandler(BaseHandler):
     def post(self):
+        error = False
         name = self.request.get("name") or "Neznanec"
         email = self.request.get("email") or "Neznanec"
         message = self.request.get("message")
-        saved_message = Guestbook(name=name, email=email, message=message)
-        saved_message.put()
 
-        return self.write("Vaše sporočilo je bilo uspešno poslano.")
+        entire_data = name + email + message
 
-'''class SeznamSporocilHandler(BaseHandler):
+        for letter in entire_data:
+            if letter == "<" or letter == ">" or letter == "/":
+                self.write("V besedilu so bili zaznani nedovoljeni znaki. Prosimo, poskusite znova.")
+                error = True
+                break
+
+        if error == False:
+            saved_message = Guestbook(name=name, email=email, message=message)
+            saved_message.put()
+            self.write("Vaše sporočilo je bilo uspešno poslano.")
+
+class SeznamSporocilHandler(BaseHandler):
     def get(self):
-        list = Guestbook.query().fetch()
+        list = Guestbook.query(Guestbook.deleted == False).fetch()
         params = {"seznam": list}
         return self.render_template("seznam_sporocil.html", params=params)
 
@@ -57,11 +67,71 @@ class PosameznoSporociloHandler(BaseHandler):
     def get(self, message_id):
         message = Guestbook.get_by_id(int(message_id))
         params = {"sporocilo": message}
-        return self.render_template("posamezno_sporocilo.html", params=params)'''
+        return self.render_template("posamezno_sporocilo.html", params=params)
+
+class UrediSporociloHandler(BaseHandler):
+    def get(self, message_id):
+        message = Guestbook.get_by_id(int(message_id))
+        params = {"sporocilo": message}
+        return self.render_template("uredi_sporocilo.html", params=params)
+
+    def post(self, message_id):
+        msg = self.request.get("message")
+        message = Guestbook.get_by_id(int(message_id))
+        message.message = msg
+        message.put()
+        return self.redirect_to("seznam-sporocil")
+
+class IzbrisiSporociloHandler(BaseHandler):
+    def get(self, message_id):
+        message = Guestbook.get_by_id(int(message_id))
+        params = {"sporocilo": message}
+        return self.render_template("izbrisi_sporocilo.html", params=params)
+
+    def post(self, message_id):
+        message = Guestbook.get_by_id(int(message_id))
+        message.deleted = True
+        message.put()
+        return self.redirect_to("seznam-sporocil")
+
+class SeznamIzbrisanihSporocilHandler(BaseHandler):
+    def get(self):
+        list = Guestbook.query(Guestbook.deleted == True).fetch()
+        params = {"seznam": list}
+        return self.render_template("seznam_izbrisanih_sporocil.html", params=params)
+
+class ObnoviIzbrisanoSporociloHandler(BaseHandler):
+    def get(self, message_id):
+        message = Guestbook.get_by_id(int(message_id))
+        params = {"sporocilo": message}
+        return self.render_template("obnovi_sporocilo.html", params=params)
+
+    def post(self, message_id):
+        message = Guestbook.get_by_id(int(message_id))
+        message.deleted = False
+        message.put()
+        return self.redirect_to("seznam-izbrisanih-sporocil")
+
+class TrajniIzbrisHandler(BaseHandler):
+    def get(self, message_id):
+        message = Guestbook.get_by_id(int(message_id))
+        params = {"sporocilo": message}
+        return self.render_template("trajno_izbrisi_sporocilo.html", params=params)
+
+    def post(self, message_id):
+        message = Guestbook.get_by_id(int(message_id))
+        message.key.delete()
+        return self.redirect_to("seznam-izbrisanih-sporocil")
+
 
 app = webapp2.WSGIApplication([
     webapp2.Route("/", MainHandler),
     webapp2.Route("/rezultat", ResultHandler),
-#    webapp2.Route("/seznam-sporocil", SeznamSporocilHandler),
-#    webapp2.Route("/sporocilo/<sporocilo_id:\d+>", PosameznoSporociloHandler)
+    webapp2.Route("/seznam-sporocil", SeznamSporocilHandler, name="seznam-sporocil"),
+    webapp2.Route("/sporocilo/<message_id:\d+>", PosameznoSporociloHandler),
+    webapp2.Route("/sporocilo/<message_id:\d+>/uredi", UrediSporociloHandler),
+    webapp2.Route("/sporocilo/<message_id:\d+>/izbrisi", IzbrisiSporociloHandler),
+    webapp2.Route("/seznam-izbrisanih-sporocil", SeznamIzbrisanihSporocilHandler, name="seznam-izbrisanih-sporocil"),
+    webapp2.Route("/sporocilo/<message_id:\d+>/obnovi", ObnoviIzbrisanoSporociloHandler),
+    webapp2.Route("/sporocilo/<message_id:\d+>/trajni-izbris", TrajniIzbrisHandler),
 ], debug=True)

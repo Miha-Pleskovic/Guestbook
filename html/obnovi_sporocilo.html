@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>OBNAVLJANJE SPOROČILA</title>
+        <style>
+            button {
+                height: 30px;
+                width: 100px;
+                font-weight: bold;
+            }
+
+            body {
+                background-color: #fffde8;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>OBNAVLJANJE SPOROČILA</h1>
+        <br>
+        <p>Ali res želiš obnoviti sporočilo?</p>
+        <form action="/sporocilo/{{ sporocilo.key.id() }}/obnovi" method="post">
+            <button type="submit">DA, obnovi</button>
+        </form>
+    </body>
+</html>
