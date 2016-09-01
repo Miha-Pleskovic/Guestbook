@@ -55,7 +55,7 @@ class ResultHandler(BaseHandler):
         if error == False:
             saved_message = Guestbook(name=name, email=email, message=message)
             saved_message.put()
-            self.write("Vaše sporočilo je bilo uspešno poslano.")
+            return self.redirect_to("seznam-sporocil")
 
 class SeznamSporocilHandler(BaseHandler):
     def get(self):
