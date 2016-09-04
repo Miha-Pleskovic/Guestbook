@@ -1,30 +1,21 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>POSAMEZNO SPOROČILO</title>
-        <style>
-            body {
-                background-color: #fffde8;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body style="background-color: #fffde8; text-align: center;">
-        <h1>PODATKI SPOROČILA</h1>
-        <p>Ime in priimek pošiljatelja: {{ sporocilo.name }}</p>
-        <p>E-mail pošiljatelja: {{ sporocilo.email }}</p>
-        <p>ID sporočila: {{ sporocilo.key.id() }}</p>
-        <p>Vnos sporočila: {{ sporocilo.message }}</p>
-        <p>Datum sporočila: {{ sporocilo.time }}</p>
-        {% if sporocilo.deleted == False %}
-            <a href="/sporocilo/{{ sporocilo.key.id() }}/uredi">Uredi</a>
-            <a href="/sporocilo/{{ sporocilo.key.id() }}/izbrisi">Izbriši</a>
-        {% endif %}
-        {% if sporocilo.deleted == True %}
-            <a href="/sporocilo/{{ sporocilo.key.id() }}/uredi">Uredi</a>
-            <a href="/sporocilo/{{ sporocilo.key.id() }}/obnovi">Obnovi</a>
-            <a href="/sporocilo/{{ sporocilo.key.id() }}/trajni-izbris">Trajno izbriši</a>
-        {% endif %}
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}POSAMEZNO SPOROČILO{% endblock title %}
+
+{% block body %}
+    <h1>PODATKI SPOROČILA</h1>
+    <p>Ime in priimek pošiljatelja: {{ sporocilo.name }}</p>
+    <p>E-mail pošiljatelja: {{ sporocilo.email }}</p>
+    <p>ID sporočila: {{ sporocilo.key.id() }}</p>
+    <p>Vnos sporočila: {{ sporocilo.message }}</p>
+    <p>Datum sporočila: {{ sporocilo.time }}</p>
+    {% if sporocilo.deleted == False %}
+        <a href="/sporocilo/{{ sporocilo.key.id() }}/uredi">Uredi</a>
+        <a href="/sporocilo/{{ sporocilo.key.id() }}/izbrisi">Izbriši</a>
+    {% endif %}
+    {% if sporocilo.deleted == True %}
+        <a href="/sporocilo/{{ sporocilo.key.id() }}/uredi">Uredi</a>
+        <a href="/sporocilo/{{ sporocilo.key.id() }}/obnovi">Obnovi</a>
+        <a href="/sporocilo/{{ sporocilo.key.id() }}/trajni-izbris">Trajno izbriši</a>
+    {% endif %}
+{% endblock body %}

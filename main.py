@@ -6,6 +6,7 @@ import jinja2
 import webapp2
 import sys
 from models import Guestbook
+#import logging
 
 reload(sys)
 sys.setdefaultencoding("utf8")
@@ -66,6 +67,7 @@ class SeznamSporocilHandler(BaseHandler):
 class PosameznoSporociloHandler(BaseHandler):
     def get(self, message_id):
         message = Guestbook.get_by_id(int(message_id))
+        #logging.info(message.message)
         params = {"sporocilo": message}
         return self.render_template("posamezno_sporocilo.html", params=params)
 

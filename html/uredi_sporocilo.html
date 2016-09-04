@@ -1,33 +1,12 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>UREDI SPOROČILO</title>
-        <style>
-            body {
-                background-color: #fffde8;
-                text-align: center;
-            }
+{% extends "base.html" %}
 
-            textarea {
-                height: 200px;
-                width: 400px;
-                font-size: 16px;
-            }
+{% block title %}UREDI SPOROČILO{% endblock title %}
 
-            button {
-            height: 30px;
-            width: 100px;
-            font-weight: bold;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>UREJANJE SPOROČILA</h1>
-        <form action="/sporocilo/{{ sporocilo.key.id() }}/uredi" method="post">
-            <textarea name="message" placeholder="{{ sporocilo.message }}" required></textarea>
-            <br>
-            <button type="submit">OK</button>
-        </form>
-    </body>
-</html>
+{% block body %}
+    <h1>UREJANJE SPOROČILA</h1>
+    <form action="/sporocilo/{{ sporocilo.key.id() }}/uredi" method="post">
+        <textarea name="message" required>{{ sporocilo.message }}</textarea>
+        <br>
+        <button type="submit">OK</button>
+    </form>
+{% endblock body %}

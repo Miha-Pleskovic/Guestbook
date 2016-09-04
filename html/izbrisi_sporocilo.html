@@ -1,27 +1,12 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>IZBRIS SPOROČILA</title>
-        <style>
-            body {
-                background-color: #fffde8;
-                text-align: center;
-            }
+{% extends "base.html" %}
 
-            button {
-                height: 30px;
-                width: 100px;
-                font-weight: bold;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>BRISANJE SPOROČILA</h1>
-        <br>
-        <p>Ali res želiš izbrisati sporočilo?</p>
-        <form action="/sporocilo/{{ sporocilo.key.id() }}/izbrisi" method="post">
-            <button type="submit">DA, izbriši</button>
-        </form>
-    </body>
-</html>
+{% block title %}IZBRIS SPOROČILA{% endblock title %}
+
+{% block body %}
+    <h1>BRISANJE SPOROČILA</h1>
+    <br>
+    <p>Ali res želiš izbrisati sporočilo?</p>
+    <form action="/sporocilo/{{ sporocilo.key.id() }}/izbrisi" method="post">
+        <button type="submit">DA, izbriši</button>
+    </form>
+{% endblock body %}
