@@ -3,24 +3,31 @@
 {% block title %}FILTON GUESTBOOK{% endblock title %}
 
 {% block body %}
-    <h3>Hotel Filton</h3>
-    <h1>KNJIGA PRITOŽB IN POHVAL</h1>
-    <br>
-    <form method="post" action="/rezultat">
-        <h4>Ime in priimek:</h4>
-        <div>
-            <input name="name" id="name">
-        </div>
+    {% if prijavljen %}
+        <h3>Hotel Filton</h3>
+        <h1>KNJIGA PRITOŽB IN POHVAL</h1>
         <br>
-        <h4>E-mail:</h4>
-        <div>
-            <input name="email" id="email">
-        </div>
-        <br>
-        <h4>Sporočilo:</h4>
-        <div>
-            <textarea name="message" required></textarea>
-        </div>
-        <button type="submit">Pošlji</button>
-    </form>
+        <form method="post" action="/rezultat">
+            <h4>Ime in priimek:</h4>
+            <div>
+                <input name="name" id="name" value="{{ uporabnik.nickname() }}">
+            </div>
+            <br>
+            <h4>E-mail:</h4>
+            <div>
+                <input name="email" id="email" value="{{ uporabnik.email() }}">
+            </div>
+            <br>
+            <h4>Sporočilo:</h4>
+            <div>
+                <textarea name="message" required></textarea>
+            </div>
+            <button type="submit">Pošlji</button>
+        </form>
+        <p><a href="{{ odjava }}">Odjava</a> </p>
+    {% else %}
+        <h3>Hotel Filton</h3>
+        <h1>KNJIGA PRITOŽB IN POHVAL</h1>
+        <p><a href="{{ prijava }}">Prosimo, prijavite se.</a></p>
+    {% endif %}
 {% endblock body %}

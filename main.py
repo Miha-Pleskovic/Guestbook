@@ -7,6 +7,7 @@ import webapp2
 import sys
 from models import Guestbook
 #import logging
+from google.appengine.api import users
 
 reload(sys)
 sys.setdefaultencoding("utf8")
@@ -36,7 +37,18 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        return self.render_template("index.html")
+        user = users.get_current_user()
+
+        if user:
+            logged_on = True
+            logout_url = users.create_logout_url("/")
+            params = {"prijavljen": logged_on, "odjava": logout_url, "uporabnik": user}
+        else:
+            logged_on = False
+            login_url = users.create_login_url("/")
+            params = {"prijavljen": logged_on, "prijava": login_url, "uporabnik": user}
+
+        return self.render_template("index.html", params=params)
 
 class ResultHandler(BaseHandler):
     def post(self):
